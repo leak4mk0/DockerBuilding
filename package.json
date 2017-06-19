@@ -1,0 +1,16 @@
+{
+  "name": "docker-building",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./",
+    "build": "node ./scripts/build",
+    "deploy": "node ./scripts/deploy"
+  },
+  "author": "leak4mk0",
+  "license": "WTFPL",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
