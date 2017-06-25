@@ -10,25 +10,38 @@ Promise.resolve()
   .then(() => (new Promise((resolve, reject) => {
     console.log('Check Docker Machine.')
     const machine = spawn('docker-machine', ['version']);
-    machine.on('error', reject);
+    let found = true;
+    machine.on('error', (err) => {
+      if (err.code === 'ENOENT') {
+        found = false;
+        return;
+      }
+      throw err;
+    });
     machine.on('exit', () => {
-      console.log('Docker Machine found.');
-      return resolve();
+      console.log(`Docker Machine: ${found.toString()}`);
+      return resolve(found);
     });
   })))
-  // Docker Machineがインストールされている場合、Docker Machineを起動する。
-  .then(() => (new Promise((resolve, reject) => {
+  // Docker Machineが検出された場合、Docker Machineを起動する。
+  .then((found) => (new Promise((resolve, reject) => {
+    if (!found) {
+      return resolve(found);
+    }
     console.log('\nStart Docker Machine.');
     const machine = spawn('docker-machine', ['start'], {
       stdio: [null, process.stdout, process.stderr],
     });
     machine.on('error', reject);
     machine.on('exit', () => {
-      return resolve();
+      return resolve(found);
     });
   })))
   // Dockerコマンドへ渡すための、Docker Machineの設定を取得する。
-  .then(() => (new Promise((resolve, reject) => {
+  .then((found) => (new Promise((resolve, reject) => {
+    if (!found) {
+      return resolve([]);
+    }
     console.log('\nGet configuration of Docker Machine.');
     const machine = spawn('docker-machine', ['config'], {
       stdio: [null, null, process.stderr],
@@ -38,22 +51,16 @@ Promise.resolve()
     machine.on('error', reject);
     machine.on('exit', (code) => {
       if (code !== 0) {
-        return reject(new Error('Doccker Machine failed.'));
+        return reject(new Error('Docker Machine failed.'));
       }
       const config = out.split('\n').filter((item) => (item !== ''));
+      console.log(`Config: ${config}`);
       return resolve(config);
     });
   })))
-  // Docker Machineが見つからない場合のエラーを無視する。
-  .catch((err) => {
-    if (err.code === 'ENOENT') {
-      return [];
-    }
-    throw err;
-  })
   // 取得した設定を用いて、Dockerイメージをビルドする。
   .then((config) => (new Promise((resolve, reject) => {
-    console.log('\nBuild Docker Image.');
+    console.log('\nBuild Docker image.');
     const machine = spawn('docker', [...config, 'build', '-t', `${meta.name}:${meta.version}`, '.'], {
       stdio: [null, process.stdout, process.stderr],
     });
