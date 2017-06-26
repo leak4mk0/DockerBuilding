@@ -61,11 +61,11 @@ Promise.resolve()
   // 取得した設定を用いて、Dockerイメージをビルドする。
   .then((config) => (new Promise((resolve, reject) => {
     console.log('\nBuild Docker image.');
-    const machine = spawn('docker', [...config, 'build', '-t', `${meta.name}:${meta.version}`, '.'], {
+    const docker = spawn('docker', [...config, 'build', '-t', `${meta.name}:${meta.version}`, '.'], {
       stdio: [null, process.stdout, process.stderr],
     });
-    machine.on('error', reject);
-    machine.on('exit', (code) => {
+    docker.on('error', reject);
+    docker.on('exit', (code) => {
       if (code !== 0) {
         return reject(new Error('Docker failed.'));
       }

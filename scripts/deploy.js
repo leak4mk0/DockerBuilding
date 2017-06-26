@@ -61,13 +61,13 @@ Promise.resolve()
   // Kubernetesの現在のコンテキストを取得する。
   .then((config) => (new Promise((resolve, reject) => {
     console.log('\nGet current context of Kubernetes.');
-    const machine = spawn('kubectl', ['config', 'current-context'], {
+    const kubectl = spawn('kubectl', ['config', 'current-context'], {
       stdio: [null, null, process.stderr],
     });
     let out = '';
-    machine.stdout.on('data', (data) => { out += data; });
-    machine.on('error', reject);
-    machine.on('exit', (code) => {
+    kubectl.stdout.on('data', (data) => { out += data; });
+    kubectl.on('error', reject);
+    kubectl.on('exit', (code) => {
       if (code !== 0) {
         return reject(new Error('Kubernetes failed.'));
       }
@@ -90,11 +90,11 @@ Promise.resolve()
     const target = `${prefix}gcr.io/${context.project}/${source}`;
     console.log(`Source: ${source}`);
     console.log(`Target: ${target}`);
-    const machine = spawn('docker', [...config, 'tag', source , target], {
+    const docker = spawn('docker', [...config, 'tag', source , target], {
       stdio: [null, process.stdout, process.stderr],
     });
-    machine.on('error', reject);
-    machine.on('exit', (code) => {
+    docker.on('error', reject);
+    docker.on('exit', (code) => {
       if (code !== 0) {
         return reject(new Error('Docker failed.'));
       }
@@ -104,12 +104,12 @@ Promise.resolve()
   // Dockerイメージをレポジトリに送信する。
   .then(([config, target]) => (new Promise((resolve, reject) => {
     console.log('\nPush a tagged image to a repository.');
-    const machine = spawn('gcloud', ['docker', '--', ...config, 'push', target], {
+    const gcloud = spawn('gcloud', ['docker', '--', ...config, 'push', target], {
       shell: true,
       stdio: [null, process.stdout, process.stderr],
     });
-    machine.on('error', reject);
-    machine.on('exit', (code) => {
+    gcloud.on('error', reject);
+    gcloud.on('exit', (code) => {
       if (code !== 0) {
         return reject(new Error('Docker failed.'));
       }
