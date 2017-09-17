@@ -7,7 +7,7 @@
     "start": "node ./",
     "build": "npm run build:script && npm run build:docker",
     "build:script": "echo Build script.",
-    "build:docker": "node ./scripts/build-docker.js",
+    "build:docker": "npm shrinkwrap && node ./scripts/build-docker.js",
     "push": "npm run push:gcr",
     "push:gcr": "node ./scripts/push-gcr.js"
   },

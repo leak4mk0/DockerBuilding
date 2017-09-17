@@ -1,16 +1,16 @@
 FROM node:8-alpine
 
-MAINTAINER leak4mk0 <leak4mk0@gmail.com>
+LABEL maintainer="leak4mk0 <leak4mk0@gmail.com>"
 
 ENV NODE_ENV=production
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-ADD ./package.json /usr/src/app
+ADD ./package.json ./npm-shrinkwrap.json /usr/src/app/
 RUN npm install
 
-ADD ./ /usr/src/app
+ADD ./ /usr/src/app/
 
 EXPOSE 8080
 ENTRYPOINT ["npm", "start"]
