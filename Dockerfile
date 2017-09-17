@@ -1,4 +1,4 @@
-FROM node:6-alpine
+FROM node:8-alpine
 
 MAINTAINER leak4mk0 <leak4mk0@gmail.com>
 

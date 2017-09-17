@@ -5,8 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./",
-    "build": "node ./scripts/build",
-    "deploy": "node ./scripts/deploy"
+    "build": "npm run build:script && npm run build:docker",
+    "build:script": "echo Build script.",
+    "build:docker": "node ./scripts/build-docker.js",
+    "push": "npm run push:gcr",
+    "push:gcr": "node ./scripts/push-gcr.js"
   },
   "author": "leak4mk0",
   "license": "WTFPL",
