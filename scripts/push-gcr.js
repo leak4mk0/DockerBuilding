@@ -4,7 +4,7 @@ const meta = require(`../package`);
 process.chdir(__dirname);
 process.chdir('..');
 
-const GCR_ZONE_SUBDOMAINS = ['us.', 'eu.', 'asia.', ''];
+const GCR_SUBDOMAINS = ['us.', 'eu.', 'asia.', ''];
 
 console.log('Check Docker Machine.');
 const machineVersion = spawnSync('docker-machine', ['version']);
@@ -39,7 +39,7 @@ console.log();
 
 console.log('Create a tag to Docker image.');
 const dockerImageSource = `${meta.name}:${meta.version}`;
-const gcrUrl = GCR_ZONE_SUBDOMAINS.find((s) => kubeContext.zone.startsWith(s)) + 'gcr.io';
+const gcrUrl = GCR_SUBDOMAINS.find((s) => (kubeContext.zone.startsWith(s.replace(/\.$/, '')))) + 'gcr.io';
 const dockerImageTarget = `${gcrUrl}/${kubeContext.project}/${dockerImageSource}`;
 console.log('Docker image source:', dockerImageSource);
 console.log('Docker image target:', dockerImageTarget);
