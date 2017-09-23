@@ -27,7 +27,7 @@ if (machineExists) {
 console.log('Get Kubernetes configuration.')
 const kubeConfigRet = spawnSync('kubectl', ['config', 'current-context'], { encoding: 'utf8' });
 if (kubeConfigRet.status) {
-  console.error('Error code:', dockerTagRet.status);
+  console.error('Error code:', kubeConfigRet.status);
   return console.log();
 }
 const kubeConfigSplit = (kubeConfigRet.stdout || '').split('\n').join('').split('_');
