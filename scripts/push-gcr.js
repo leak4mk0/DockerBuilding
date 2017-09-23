@@ -44,7 +44,7 @@ const dockerImageTarget = `${gcrUrl}/${kubeContext.project}/${dockerImageSource}
 console.log('Docker image source:', dockerImageSource);
 console.log('Docker image target:', dockerImageTarget);
 const dockerTagArgs = [...dockerConfig, 'tag', dockerImageSource, dockerImageTarget];
-const dockerTagRet = spawnSync('dockers', dockerTagArgs, { stdio: 'inherit' });
+const dockerTagRet = spawnSync('docker', dockerTagArgs, { stdio: 'inherit' });
 if (dockerTagRet.status) {
   console.log('Error code:', dockerTagRet.status);
   return console.log();
