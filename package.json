@@ -9,7 +9,9 @@
     "build:script": "echo Build script.",
     "build:docker": "npm shrinkwrap && node ./scripts/build-docker.js",
     "push": "npm run push:gcr",
-    "push:gcr": "node ./scripts/push-gcr.js"
+    "push:gcr": "node ./scripts/push-gcr.js",
+    "deploy": "npm run deploy:gke",
+    "deploy:gke": "node ./scripts/deploy-gke.js"
   },
   "author": "leak4mk0",
   "license": "WTFPL",
