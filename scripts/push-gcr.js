@@ -27,7 +27,7 @@ if (machineExists) {
 console.log('Get Kubernetes configuration.')
 const kubeConfigRet = spawnSync('kubectl', ['config', 'current-context'], { encoding: 'utf8' });
 if (kubeConfigRet.status) {
-  console.log('Error code:', dockerTagRet.status);
+  console.error('Error code:', dockerTagRet.status);
   return console.log();
 }
 const kubeConfigSplit = (kubeConfigRet.stdout || '').split('\n').join('').split('_');
@@ -46,7 +46,7 @@ console.log('Docker image target:', dockerImageTarget);
 const dockerTagArgs = [...dockerConfig, 'tag', dockerImageSource, dockerImageTarget];
 const dockerTagRet = spawnSync('docker', dockerTagArgs, { stdio: 'inherit' });
 if (dockerTagRet.status) {
-  console.log('Error code:', dockerTagRet.status);
+  console.error('Error code:', dockerTagRet.status);
   return console.log();
 }
 console.log();
@@ -55,7 +55,7 @@ console.log('Push Docker image to repository.');
 const gcloudPushArgs = ['docker', '--', ...dockerConfig, 'push', dockerImageTarget];
 const gcloudPushRet = spawnSync('gcloud', gcloudPushArgs, { stdio: 'inherit', shell: true });
 if (gcloudPushRet.status) {
-  console.log('Error code:', gcloudPushRet.status);
+  console.error('Error code:', gcloudPushRet.status);
   return console.log();
 }
 console.log();

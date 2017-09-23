@@ -8,7 +8,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 ADD ./package.json ./npm-shrinkwrap.json /usr/src/app/
-RUN npm install
+RUN npm install 2>&1
 
 ADD ./ /usr/src/app/
 

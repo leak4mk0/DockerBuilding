@@ -28,7 +28,7 @@ console.log('Docker image tag:', dockerImageTag);
 const dockerBuildArgs = [...dockerConfig, 'build', '-t', dockerImageTag, '.'];
 const dockerBuildRet = spawnSync('docker', dockerBuildArgs, { stdio: 'inherit' });
 if (dockerBuildRet.status) {
-  console.log('Error code:', dockerBuildRet.status);
+  console.error('Error code:', dockerBuildRet.status);
   return console.log();
 }
 console.log();
